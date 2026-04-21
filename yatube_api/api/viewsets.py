@@ -9,6 +9,7 @@ from .serializers import (CommentSerializer, FollowSerializer, GroupSerializer,
                           PostSerializer)
 
 
+
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -17,8 +18,8 @@ class PostViewSet(viewsets.ModelViewSet):
     def paginate_queryset(self, queryset):
         request = self.request
         if request and (
-            request.query_params.get('limit') or 
-            request.query_params.get('offset')
+            request.query_params.get('limit')
+            or request.query_params.get('offset')
         ):
             self.pagination_class = LimitOffsetPagination
             return super().paginate_queryset(queryset)
