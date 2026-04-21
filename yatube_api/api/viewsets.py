@@ -15,14 +15,6 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitOffsetPagination
 
-    def get_paginated_response(self, data):
-        # Проверяем, запущены ли тесты
-        import sys
-        if 'pytest' in sys.modules:
-            from rest_framework.response import Response
-            return Response(data)
-        return super().get_paginated_response(data)
-
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
