@@ -13,7 +13,17 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (IsAuthorOrReadOnly,)
-    pagination_class = LimitOffsetPagination
+
+    def paginate_queryset(self, queryset):
+        request = self.request
+        if request and (
+            request.query_params.get('limit') or 
+            request.query_params.get('offset')
+        ):
+            self.pagination_class = LimitOffsetPagination
+            return super().paginate_queryset(queryset)
+        self.pagination_class = None
+        return None
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
